@@ -1,11 +1,12 @@
 /**
  * Author: Sean Verity
  */
-import settings from '../index.js'; // The settings object
+import * as app from '../index.js';
 
 export default class Cart {
     constructor() {
         this._items = new Array();
+        const cartTotalElement = document.body.querySelector(".cart-total");
     }
     /* ---- Get ---- */
     get items() { return this._items; }
@@ -25,7 +26,7 @@ export default class Cart {
     }
 
     /* ---- Debug Functions ---- */
-    displayTotal() {
+    logTotal() {
 
     }
 }

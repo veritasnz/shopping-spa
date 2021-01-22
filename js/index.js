@@ -2,6 +2,7 @@
  * Author: Sean Verity
  */
 
+let w = window;
 /* ---- Class Import ---- */
 import Cart from './classes/cart.js';
 import {
@@ -9,9 +10,10 @@ import {
     Option,
     Plan,
     buildItemElement,
+    updateCurrentPlan,
     findDOMItem,
     activateDOMItem,
-    deactivateDOMItem
+    deactivateDOMItem,
 } from './classes/item.js';
 
 /* ====== WP Queries ====== *
@@ -28,18 +30,17 @@ fetch("./js/data.json")
     });
 
 /* ====== Settings ====== */
-let settings = {
+export const settings = {
     "jsActiveClassString": "js-item-active", // String used to activate item - used by CSS
 };
-export default settings;
 
 /* ====== Global ====== */
 /* ---- Cart Init ---- *
 * Create cart and cart element
 */
-const cartTotalElement = document.body.querySelector(".cart-total");
-let cart = new Cart();
-let currentPlan = new Plan();
+
+w.cart = new Cart();
+w.currentPlan = new Plan();
 
 function appInit(jsonData) {
     /* ---- Plans Init ---- *
@@ -69,11 +70,13 @@ function appInit(jsonData) {
 
         //Initally set #1 "Corporate Site" as currentPlan
         if (currentObject.itemId == 1) {
-            currentPlan = plan;
+            w.currentPlan = plan;
         }
     }
 
-    updateCurrentPlan(currentPlan);
+    // Initiate initial currentPlan
+    updateCurrentPlan(w.currentPlan);
+
 
     /* ---- Options Inits ---- *
      * Create options from JSON data
@@ -94,33 +97,4 @@ function appInit(jsonData) {
             optionContainerElement.appendChild(buildItemElement(option));
         }
     }
-}
-
-function updateCurrentPlan(newPlan) {
-    /* ---- Cart Ops ---- *
-    * Loop through cart, remove current plan and replace with new
-    */
-    let cartPlanFound = false; // Used to find out if operation should be plan change or plan addition
-    cart.items.forEach(function (item, i) {
-        // If is Plan object and is currentPlan
-        if ((item instanceof Plan) && (currentPlan.itemId == item.itemId)) {
-            cart.items[i] = newPlan;
-            cartPlanFound = true;
-        }
-    });
-
-    if (!cartPlanFound) {
-        console.log("Plan not found in cart. Adding " + newPlan.itemName + " to cart now.");
-        cart.addItem(newPlan);
-    }
-
-    /* ---- DOM Ops ---- *
-     * Find current plan in the DOM, deactivate.
-     * Find new plan in DOM, activate
-    */
-    deactivateDOMItem(currentPlan.itemId);
-    activateDOMItem(newPlan.itemId);
-
-    // Finally update the current plan
-    currentPlan = newPlan;
 }

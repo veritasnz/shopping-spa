@@ -2,7 +2,9 @@
  * Author: Sean Verity
  */
 
-import settings from '../index.js'; // The settings object
+let w = window;
+import {settings} from '../index.js';
+
 
 export class Item {
     constructor(itemId, itemName, description, price) {
@@ -111,4 +113,35 @@ export function deactivateDOMItem(itemId) {
     if (elementToDeactivate) {
         elementToDeactivate.classList.remove(settings.jsActiveClassString);
     }
+}
+
+export function updateCurrentPlan(newPlan) {
+    /* ---- Cart Ops ---- *
+    * Loop through cart, remove current plan and replace with new
+    */
+    let cartPlanFound = false; // Used to find out if operation should be plan change or plan addition
+    w.cart.items.forEach(function (item, i) {
+        // If is Plan object and is currentPlan
+        if ((item instanceof Plan) && (w.currentPlan.itemId == item.itemId)) {
+            w.cart.items[i] = newPlan;
+            cartPlanFound = true;
+        }
+    });
+
+    if (!cartPlanFound) {
+        console.log("Current plan not found in cart. Adding " + newPlan.itemName + " to cart now.");
+        w.cart.addItem(newPlan);
+    } else {
+        console.log(w.currentPlan.itemName + " plan found in cart. Replacing with " + newPlan.itemName + " now.");
+    }
+
+    /* ---- DOM Ops ---- *
+     * Find current plan in the DOM, deactivate.
+     * Find new plan in DOM, activate
+    */
+    deactivateDOMItem(currentPlan.itemId);
+    activateDOMItem(newPlan.itemId);
+
+    // Finally update the current plan
+    w.currentPlan = newPlan;
 }
