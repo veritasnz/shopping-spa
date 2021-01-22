@@ -1,0 +1,37 @@
+{
+    "name": "gutenbase_gulpfile",
+    "description": "Gulpfile for building the Gutenbase theme",
+    "author": {
+        "name": "Sean Verity"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/veritasnz/gutenbase"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@babel/core": "^7.12.10",
+        "@babel/preset-env": "^7.12.11",
+        "autoprefixer": "^9.4.6",
+        "beeper": "^1.1.1",
+        "browser-sync": "^2.26.12",
+        "gulp": "^4.0.0",
+        "gulp-autoprefixer": "^6.1.0",
+        "gulp-babel": "^8.0.0",
+        "gulp-cached": "^1.1.1",
+        "gulp-concat": "^2.6.1",
+        "gulp-notify": "^3.2.0",
+        "gulp-plumber": "^1.2.1",
+        "gulp-sass": "^4.0.2",
+        "gulp-sass-lint": "^1.4.0",
+        "gulp-shell": "^0.6.5"
+    },
+    "browserslist": [
+        "last 2 versions",
+        "> 1%",
+        "IE 11"
+    ],
+    "scripts": {
+        "postinstall": "./node_modules/.bin/gulp build"
+    }
+}

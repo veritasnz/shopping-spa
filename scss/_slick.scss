@@ -1,0 +1,262 @@
+/* Slick Official Styles
+################################################################# */
+// sass-lint:disable nesting-depth
+
+/* Slick (slick.css)
+----------------------------------------------- */
+/* Slider */
+.slick-slider {
+    position: relative;
+
+    display: block;
+    box-sizing: border-box;
+    user-select: none;
+    touch-action: pan-y;
+
+    &.slick-track,
+    &.slick-list {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.slick-list {
+    position: relative;
+
+    display: block;
+    overflow: hidden;
+
+    margin: 0;
+    padding: 0;
+
+    &:focus {
+        outline: none;
+    }
+
+    &.dragging {
+        cursor: hand;
+    }
+}
+
+.slick-track {
+    position: relative;
+    top: 0;
+    left: 0;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    &:before,
+    &:after {
+        display: table;
+        content: '';
+    }
+
+    &:after {
+        clear: both;
+    }
+
+    .slick-loading & {
+        visibility: hidden;
+    }
+}
+
+.slick-slide {
+    display: none;
+    float: left;
+    height: 100%;
+    min-height: 1px;
+
+    img {
+        display: block;
+    }
+
+    &.slick-loading {
+        img {
+            display: none;
+        }
+    }
+
+    &.dragging {
+        img {
+            pointer-events: none;
+        }
+    }
+
+    .slick-initialized & {
+        display: block;
+    }
+
+    .slick-loading & {
+        visibility: hidden;
+    }
+
+    .slick-vertical & {
+        display: block;
+        height: auto;
+        border: 1px solid transparent;
+    }
+}
+
+.slick-arrow.slick-hidden {
+    display: none;
+}
+
+
+/* Slick Theme (slick-theme.css)
+----------------------------------------------- */
+
+/* Slider */
+.slick-loading .slick-list {
+    background: $c-white url('vendor/slick/ajax-loader.gif') center center no-repeat;
+}
+
+/* Icons */
+@font-face {
+    font-family: 'slick';
+    font-weight: normal;
+    font-style: normal;
+
+    src: url('vendor/slick/fonts/slick.eot?#iefix') format('embedded-opentype'), url('vendor/slick/fonts/slick.woff') format('woff'), url('vendor/slick/fonts/slick.ttf') format('truetype'), url('vendor/slick/fonts/slick.svg#slick') format('svg');
+}
+
+/* Arrows */
+.slick-prev,
+.slick-next {
+    font-size: 0;
+    line-height: 0;
+
+    position: absolute;
+    top: 50%;
+
+    display: block;
+
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    transform: translate(0, -50%);
+
+    cursor: pointer;
+
+    color: transparent;
+    border: none;
+    outline: none;
+    background: transparent;
+
+    &:hover,
+    &:focus {
+        color: transparent;
+        outline: none;
+        background: transparent;
+
+        &:before {
+            opacity: 1;
+        }
+    }
+
+    &.slick-disabled:before {
+        opacity: 0.25;
+    }
+
+    &:before {
+        font-family: 'slick';
+        font-size: 20px;
+        line-height: 1;
+
+        opacity: 0.75;
+        color: $c-white;
+    }
+}
+
+.slick-prev {
+    left: -25px;
+
+    &:before {
+        content: '←';
+    }
+}
+
+.slick-next {
+    right: -25px;
+
+    &:before {
+        content: '→';
+    }
+}
+
+/* Dots */
+.slick-dots {
+    $dot-size: 3rem;
+
+    position: absolute;
+    z-index: 1001;
+    bottom: 3rem;
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+
+    li {
+        position: relative;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin: 0 5px;
+        padding: 0;
+        cursor: pointer;
+
+        button {
+            font-size: 0;
+            line-height: 0;
+            display: block;
+            width: 20px;
+            height: 20px;
+            padding: 5px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: $c-white;
+
+
+            &:active,
+            &:hover,
+            &:focus {
+                outline: none;
+                box-shadow: none;
+
+                &:before {
+                    opacity: 1;
+                }
+            }
+
+            &:before {
+                content: '•';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: $dot-size;
+                height: $dot-size;
+                font-size: $dot-size;
+                line-height: 1;
+                text-align: center;
+                text-shadow: $text-shadow;
+                opacity: 0.5;
+                transition: opacity $transition-default;
+            }
+        }
+
+        &.slick-active button:before {
+            opacity: 1;
+        }
+    }
+}
+
+/* Hide slick pictures before page load
+----------------------------------------------- */
+.slick-slider:not(.slick-initialized) .slick-slide:not(:first-of-type) {
+    position: absolute;
+    left: -5000px;
+}

@@ -1,0 +1,67 @@
+html {
+    font-size: 62.5%;
+}
+
+body {
+    position: relative;
+
+    font-size: $fs-body;
+    font-weight: $fw-light;
+    font-family: $ff-sans;
+    letter-spacing: 1px;
+
+    line-height: 1.6;
+
+    color: $c-text;
+    background: $c-white;
+    scroll-behavior: smooth;
+    overflow-anchor: auto;
+}
+
+a {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        transition: all $transition-default; //sass-lint:disable-line no-transition-all
+        text-decoration: none;
+        color: inherit;
+    }
+}
+
+::selection {
+    color: $c-white;
+    background: $c-theme-color;
+}
+
+input {
+    &[type='button'] {
+        cursor: pointer;
+    }
+}
+
+em {
+    font-style: normal;
+}
+
+img,
+svg,
+iframe {
+    display: block;
+    max-width: 100%;
+
+}
+
+img,
+svg {
+    height: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: $fw-bold;
+}
