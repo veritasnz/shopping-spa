@@ -3,9 +3,10 @@
  */
 
 let w = window;
-import {settings} from '../index.js';
+import { settings } from '../index.js';
 
-
+/* Item Class
+----------------------------------------------- */
 export class Item {
     constructor(itemId, itemName, description, price) {
         this._itemId = itemId;
@@ -24,10 +25,19 @@ export class Item {
 
     get quantity() { return this._quantity; }
 
+    /* ---- Set ---- */
+    set quantity(num) {
+        if(num > -1) {
+            this._quantity = num;
+        }
+    }
+
     /* ---- Class Functions ---- */
 
 }
 
+/* Option Class
+----------------------------------------------- */
 export class Option extends Item {
     constructor(itemId, itemName, description, price, /**/ hasCustomNotes, possiblePlans, quantityLimit) {
         super(itemId, itemName, description, price);
@@ -50,6 +60,8 @@ export class Option extends Item {
     /* ---- Debug Functions ---- */
 }
 
+/* Plan Class
+----------------------------------------------- */
 export class Plan extends Item {
     constructor(itemId, itemName, description, price, /**/ baseItems) {
         super(itemId, itemName, description, price);
@@ -64,13 +76,13 @@ export class Plan extends Item {
     /* ---- Debug Functions ---- */
 }
 
-/* ---- Build Item Element ---- *
+/* Build Item
+----------------------------------------------- 
  * Creates the DOM element that represents the item that is to be added. 
  * Also adds event listeners to the item etc.
 */
 export function buildItemElement(item) {
-
-    // Build Element
+    /* ---- Build Element ---- */
     let itemElement = document.createElement('li');
     itemElement.setAttribute("itemid", item.itemId)
     if (item instanceof Plan) {
@@ -80,41 +92,81 @@ export function buildItemElement(item) {
     }
     // <li class><h4>
 
-    // Build Title
+    /* ---- Build Title ---- */
     let itemIdElement = document.createElement('h4');
     itemIdElement.innerText = item.itemId + ": " + item.itemName;
     itemElement.appendChild(itemIdElement);
     // <li class><h4>
 
-    // Build Description
+    /* ---- Build Description ---- */
     let itemDescriptionElement = document.createElement('p');
     itemDescriptionElement.innerText = item.description;
     itemElement.appendChild(itemDescriptionElement);
     // <li class><h4><p>
+
+    /* ---- Build Counter ---- */
+    if (item instanceof Option) {
+        //Container
+        let itemCounterElement = document.createElement('div');
+        itemCounterElement.classList.add("item-counter");
+
+        //Total
+        let itemCounterTotalElement = document.createElement('div');
+        itemCounterTotalElement.classList.add("item-counter__total");
+        itemCounterTotalElement.innerText = item.quantity; // initialized as 0
+        //Add click
+
+        //Add
+        let itemCounterAddElement = document.createElement('div');
+        itemCounterAddElement.classList.add("item-counter__add");
+        itemCounterAddElement.addEventListener("click", function () {
+            addToCart(item);
+            updateCounter(item, itemCounterTotalElement);
+        });
+
+        //Remove
+        let itemCounterRemoveElement = document.createElement('div');
+        itemCounterRemoveElement.classList.add("item-counter__remove");
+        itemCounterRemoveElement.addEventListener("click", function () {
+            removeFromCart(item);
+            updateCounter(item, itemCounterTotalElement);
+        });
+
+        itemCounterElement.appendChild(itemCounterRemoveElement);
+        itemCounterElement.appendChild(itemCounterTotalElement);
+        itemCounterElement.appendChild(itemCounterAddElement);
+        itemElement.appendChild(itemCounterElement);
+    }
 
     // Build rest of element here
 
     return itemElement;
 }
 
-export function findDOMItem(itemId) {
-    return document.body.querySelector('[itemid="' + itemId + '"]');
+/* Add item to cart
+-----------------------------------------------*/
+function addToCart(item) {
+    w.cart.addItem(item);
+    // Complete method
 }
 
-export function activateDOMItem(itemId) {
-    let elementToActivate = document.body.querySelector('[itemid="' + itemId + '"]');
-    if (elementToActivate) {
-        elementToActivate.classList.add(settings.jsActiveClassString);
-    }
+/* Remove item to cart
+-----------------------------------------------*/
+function removeFromCart(item) {
+    w.cart.removeItem(item);
+    // Complete method
 }
 
-export function deactivateDOMItem(itemId) {
-    let elementToDeactivate = document.body.querySelector('[itemid="' + itemId + '"]');
-    if (elementToDeactivate) {
-        elementToDeactivate.classList.remove(settings.jsActiveClassString);
-    }
+/* Update the counter
+-----------------------------------------------*/
+function updateCounter(item, element) {
+    element.innerText = item.quantity;
+
+    // *** IMPLEMENT the updating of neighbouring buttons (e.g. grey out if zero items etc)
 }
 
+/* Update Plan
+----------------------------------------------- */
 export function updateCurrentPlan(newPlan) {
     /* ---- Cart Ops ---- *
     * Loop through cart, remove current plan and replace with new
@@ -122,7 +174,7 @@ export function updateCurrentPlan(newPlan) {
     let cartPlanFound = false; // Used to find out if operation should be plan change or plan addition
     w.cart.items.forEach(function (item, i) {
         // If is Plan object and is currentPlan
-        if ((item instanceof Plan) && (w.currentPlan.itemId == item.itemId)) {
+        if (w.currentPlan.itemId == item.itemId) {
             w.cart.items[i] = newPlan;
             cartPlanFound = true;
         }
@@ -144,4 +196,24 @@ export function updateCurrentPlan(newPlan) {
 
     // Finally update the current plan
     w.currentPlan = newPlan;
+}
+
+/* Item Utility Classes
+----------------------------------------------- */
+export function findDOMItem(itemId) {
+    return document.body.querySelector('[itemid="' + itemId + '"]');
+}
+
+export function activateDOMItem(itemId) {
+    let elementToActivate = document.body.querySelector('[itemid="' + itemId + '"]');
+    if (elementToActivate) {
+        elementToActivate.classList.add(settings.jsActiveClassString);
+    }
+}
+
+export function deactivateDOMItem(itemId) {
+    let elementToDeactivate = document.body.querySelector('[itemid="' + itemId + '"]');
+    if (elementToDeactivate) {
+        elementToDeactivate.classList.remove(settings.jsActiveClassString);
+    }
 }
