@@ -119,11 +119,10 @@ export function buildItemElement(item) {
         //Add
         let itemCounterAddElement = document.createElement('div');
         itemCounterAddElement.classList.add("item-counter__add");
+        itemCounterAddElement.classList.add(settings.jsActiveClassString); // Initialize as active
         itemCounterAddElement.addEventListener("click", function () {
-            if(
-                (item.quantityLimit > item.quantity) ||
-                (item.quantityLimit === 0)
-            ){
+            // Based on item quantityLimit, decide to add to cart
+            if( (item.quantityLimit > item.quantity) || (item.quantityLimit === 0) ){
                 addToCart(item);
                 updateDOMCounter(item, itemCounterTotalElement);
             } else {

@@ -68,8 +68,13 @@
     color: $c-white;
     background: $c-theme-color;
 
-    &:not(.#{$js-active}) {
-        opacity: 0.4;
+    opacity: 0.4;
+    pointer-events: none;
+
+    &.#{$js-active} {
+        opacity: 1;
+        pointer-events: initial;
+        cursor: pointer;
     }
 
     &:before {
