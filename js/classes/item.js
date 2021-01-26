@@ -120,8 +120,15 @@ export function buildItemElement(item) {
         let itemCounterAddElement = document.createElement('div');
         itemCounterAddElement.classList.add("item-counter__add");
         itemCounterAddElement.addEventListener("click", function () {
-            addToCart(item);
-            updateCounter(item, itemCounterTotalElement);
+            if(
+                (item.quantityLimit > item.quantity) ||
+                (item.quantityLimit === 0)
+            ){
+                addToCart(item);
+                updateDOMCounter(item, itemCounterTotalElement);
+            } else {
+                console.log('Item has reached quantity limit. Aborting add');
+            }
         });
 
         //Remove
@@ -129,13 +136,17 @@ export function buildItemElement(item) {
         itemCounterRemoveElement.classList.add("item-counter__remove");
         itemCounterRemoveElement.addEventListener("click", function () {
             removeFromCart(item);
-            updateCounter(item, itemCounterTotalElement);
+            updateDOMCounter(item, itemCounterTotalElement);
         });
 
         itemCounterElement.appendChild(itemCounterRemoveElement);
         itemCounterElement.appendChild(itemCounterTotalElement);
         itemCounterElement.appendChild(itemCounterAddElement);
         itemElement.appendChild(itemCounterElement);
+    } else if (item instanceof Plan) {
+        itemElement.addEventListener("click", function () {
+            updateCurrentPlan(item);
+        });
     }
 
     // Build rest of element here
@@ -147,20 +158,33 @@ export function buildItemElement(item) {
 -----------------------------------------------*/
 function addToCart(item) {
     w.cart.addItem(item);
-    // Complete method
+    ///*** Complete method
 }
 
 /* Remove item to cart
 -----------------------------------------------*/
 function removeFromCart(item) {
     w.cart.removeItem(item);
-    // Complete method
+    //*** */ Complete method
 }
 
 /* Update the counter
 -----------------------------------------------*/
-function updateCounter(item, element) {
+function updateDOMCounter(item, element) {
+    let removeElement = element.previousElementSibling;
+    let addElement = element.nextElementSibling;
+
     element.innerText = item.quantity;
+
+    // If item quantity is 0, deactivate minus and activate add
+    // Else activate minus
+    if(item.quantity <= 0) {
+        removeElement.classList.remove(settings.jsActiveClassString); // remove active state from minus button
+        addElement.classList.add(settings.jsActiveClassString); // add active state to add button
+    } else {
+        removeElement.classList.add(settings.jsActiveClassString); // remove active state from minus button
+    }
+
 
     // *** IMPLEMENT the updating of neighbouring buttons (e.g. grey out if zero items etc)
 }
@@ -181,7 +205,7 @@ export function updateCurrentPlan(newPlan) {
     });
 
     if (!cartPlanFound) {
-        console.log("Current plan not found in cart. Adding " + newPlan.itemName + " to cart now.");
+        console.log("Nothing found in cart. Adding " + newPlan.itemName + " to cart now.");
         w.cart.addItem(newPlan);
     } else {
         console.log(w.currentPlan.itemName + " plan found in cart. Replacing with " + newPlan.itemName + " now.");

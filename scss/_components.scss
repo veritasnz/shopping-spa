@@ -14,7 +14,7 @@
     padding: 2rem;
     border: 1px solid $c-text;
 
-    &.js-item-active {
+    &.#{$js-active} {
         color: $c-white;
         background: $c-theme-color;
     }
@@ -67,6 +67,10 @@
     border-radius: 0.5em;
     color: $c-white;
     background: $c-theme-color;
+
+    &:not(.#{$js-active}) {
+        opacity: 0.4;
+    }
 
     &:before {
         display: block;

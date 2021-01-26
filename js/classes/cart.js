@@ -21,8 +21,9 @@ export default class Cart {
         newItem.quantity++;
         this.items.push(newItem);
 
-        console.log("Current cart count: " + this.countItem(newItem));
-        console.log("Current item count: " + newItem.quantity);
+        //Debugging
+        // console.log("Current cart count: " + this.countItem(newItem));
+        // console.log("Current item count: " + newItem.quantity);
     }
 
     removeItem(removeItem) {
@@ -38,9 +39,10 @@ export default class Cart {
         removeItem.quantity--;
 
         if (itemFound) {
-            // console.log("Removing " + removeItem.itemName + " to the cart.");
-            console.log("Current cart count: " + this.countItem(removeItem));
-            console.log("Current item count: " + removeItem.quantity);
+            //Debugging
+            console.log("Removing " + removeItem.itemName + " from the cart.");
+            // console.log("Current cart count: " + this.countItem(removeItem));
+            // console.log("Current item count: " + removeItem.quantity);
         } else {
             console.log("Tried to remove " + removeItem.itemName + ", but it was not found in the cart.");
         }
