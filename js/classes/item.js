@@ -8,11 +8,12 @@ import { settings } from '../index.js';
 /* Item Class
 ----------------------------------------------- */
 export class Item {
-    constructor(itemId, itemName, description, price) {
+    constructor(itemId, itemName, description, price, className) {
         this._itemId = itemId;
         this._itemName = itemName;
         this._description = description;
         this._price = price;
+        this._className = className;
 
         this._quantity = 0; // Start quantity is always zero
     }
@@ -22,6 +23,7 @@ export class Item {
     get itemName() { return this._itemName; }
     get description() { return this._description; }
     get price() { return this._price; }
+    get className() { return this._className; }
 
     get quantity() { return this._quantity; }
 
@@ -39,8 +41,8 @@ export class Item {
 /* Option Class
 ----------------------------------------------- */
 export class Option extends Item {
-    constructor(itemId, itemName, description, price, /**/ hasCustomNotes, possiblePlans, quantityLimit) {
-        super(itemId, itemName, description, price);
+    constructor(itemId, itemName, description, price, className, /**/ hasCustomNotes, possiblePlans, quantityLimit) {
+        super(itemId, itemName, description, price, className);
 
         this._hasCustomNotes = hasCustomNotes;
         this._possiblePlans = possiblePlans;
@@ -63,8 +65,8 @@ export class Option extends Item {
 /* Plan Class
 ----------------------------------------------- */
 export class Plan extends Item {
-    constructor(itemId, itemName, description, price, /**/ baseItems) {
-        super(itemId, itemName, description, price);
+    constructor(itemId, itemName, description, price, className, /**/ baseItems) {
+        super(itemId, itemName, description, price, className);
 
         this._baseItems = baseItems;
     }
@@ -84,12 +86,8 @@ export class Plan extends Item {
 export function buildItemElement(currentItem) {
     /* ---- Create Parent ---- */
     let itemParentElement = document.createElement('li');
-    itemParentElement.setAttribute("itemid", currentItem.itemId)
-    if (currentItem instanceof Plan) {
-        itemParentElement.classList.add('plan-element');
-    } else if (currentItem instanceof Option) {
-        itemParentElement.classList.add('option-element');
-    }
+    itemParentElement.setAttribute("itemid", currentItem.itemId);
+    itemParentElement.classList.add(currentItem.className);
 
     /* ---- Build Title ---- */
     let itemTitleElement = document.createElement('h4');

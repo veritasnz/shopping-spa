@@ -59,7 +59,8 @@ function appInit(jsonData) {
             currentObject.itemName,
             currentObject.description,
             currentObject.price,
-            currentObject.baseItems
+            'plan-element',
+            currentObject.baseItems,
         );
 
         //Create element for plans view
@@ -89,6 +90,7 @@ function appInit(jsonData) {
             currentObject.itemName,
             currentObject.description,
             currentObject.price,
+            'option-element',
             currentObject.hasCustomNotes,
             currentObject.possiblePlans,
             currentObject.quantityLimit
