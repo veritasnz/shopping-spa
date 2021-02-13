@@ -63,7 +63,7 @@ export default class Cart {
 
         return isFound;
     }
-    
+
     countItem(searchItem) {
         let count = 0;
         for (let i = 0; i < this.items.length; i++) {

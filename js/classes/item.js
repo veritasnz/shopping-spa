@@ -118,44 +118,44 @@ export function buildItemElement(currentItem) {
 /* Build Counter Element
 -----------------------------------------------*/
 function buildCounterElement(item) {
-        //Parent
-        let counterElement = document.createElement('div');
-        counterElement.classList.add("item-counter");
+    //Parent
+    let counterElement = document.createElement('div');
+    counterElement.classList.add("item-counter");
 
-        //Total
-        let itemCounterTotalElement = document.createElement('div');
-        itemCounterTotalElement.classList.add("item-counter__total");
-        itemCounterTotalElement.innerText = item.quantity; // initialized as 0
-        //Add click
+    //Total
+    let itemCounterTotalElement = document.createElement('div');
+    itemCounterTotalElement.classList.add("item-counter__total");
+    itemCounterTotalElement.innerText = item.quantity; // initialized as 0
+    //Add click
 
-        //Add Button
-        let itemCounterAddElement = document.createElement('div');
-        itemCounterAddElement.classList.add("item-counter__add");
-        itemCounterAddElement.classList.add(settings.jsActiveClassString); // Initialize as active
-        itemCounterAddElement.addEventListener("click", function () {
-            // Based on item quantityLimit, decide to add to cart
-            if ((item.quantityLimit > item.quantity) || (item.quantityLimit === 0)) {
-                addToCart(item);
-                updateViewCounterTotal(item, itemCounterTotalElement);
-            } else {
-                console.log('Item has reached quantity limit. Aborting add');
-            }
-        });
-
-        //Remove Button
-        let itemCounterRemoveElement = document.createElement('div');
-        itemCounterRemoveElement.classList.add("item-counter__remove");
-        itemCounterRemoveElement.addEventListener("click", function () {
-            removeFromCart(item);
+    //Add Button
+    let itemCounterAddElement = document.createElement('div');
+    itemCounterAddElement.classList.add("item-counter__add");
+    itemCounterAddElement.classList.add(settings.jsActiveClassString); // Initialize as active
+    itemCounterAddElement.addEventListener("click", function () {
+        // Based on item quantityLimit, decide to add to cart
+        if ((item.quantityLimit > item.quantity) || (item.quantityLimit === 0)) {
+            addToCart(item);
             updateViewCounterTotal(item, itemCounterTotalElement);
-        });
+        } else {
+            console.log('Item has reached quantity limit. Aborting add');
+        }
+    });
 
-        // Append to parent
-        counterElement.appendChild(itemCounterRemoveElement);
-        counterElement.appendChild(itemCounterTotalElement);
-        counterElement.appendChild(itemCounterAddElement);
+    //Remove Button
+    let itemCounterRemoveElement = document.createElement('div');
+    itemCounterRemoveElement.classList.add("item-counter__remove");
+    itemCounterRemoveElement.addEventListener("click", function () {
+        removeFromCart(item);
+        updateViewCounterTotal(item, itemCounterTotalElement);
+    });
 
-        return counterElement;
+    // Append to parent
+    counterElement.appendChild(itemCounterRemoveElement);
+    counterElement.appendChild(itemCounterTotalElement);
+    counterElement.appendChild(itemCounterAddElement);
+
+    return counterElement;
 }
 
 /* Add item to cart
