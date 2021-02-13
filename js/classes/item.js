@@ -32,6 +32,8 @@ export class Item {
         if (num > -1) {
             this._quantity = num;
         }
+
+        return this; // Returning for method chaining
     }
 
     /* ---- Class Functions ---- */

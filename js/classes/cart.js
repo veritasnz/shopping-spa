@@ -25,28 +25,32 @@ export default class Cart {
         //Debugging
         // console.log("Current cart count: " + this.countItem(newItem));
         // console.log("Current item count: " + newItem.quantity);
+
+        return this; // Returning for method chaining
     }
 
-    removeItem(removeItem) {
+    removeItem(itemToRemove) {
         let itemFound = false;
         for (let i = 0; i < this.items.length; i++) {
-            if (this.items[i].itemId === removeItem.itemId) {
+            if (this.items[i].itemId === itemToRemove.itemId) {
                 itemFound = true;
                 this.items.splice(i, 1);
                 break; //break once item found
             }
         }
 
-        removeItem.quantity--;
+        itemToRemove.quantity--;
 
         if (itemFound) {
             //Debugging
-            console.log("Removing " + removeItem.itemName + " from the cart.");
-            // console.log("Current cart count: " + this.countItem(removeItem));
-            // console.log("Current item count: " + removeItem.quantity);
+            console.log("Removing " + itemToRemove.itemName + " from the cart.");
+            // console.log("Current cart count: " + this.countItem(itemToRemove));
+            // console.log("Current item count: " + itemToRemove.quantity);
         } else {
-            console.log("Tried to remove " + removeItem.itemName + ", but it was not found in the cart.");
+            console.log("Tried to remove " + itemToRemove.itemName + ", but it was not found in the cart.");
         }
+
+        return this; // Returning for method chaining
     }
 
     hasItem(searchItem) {
@@ -56,6 +60,7 @@ export default class Cart {
                 isFound = true;
             }
         }
+
         return isFound;
     }
     
@@ -66,12 +71,15 @@ export default class Cart {
                 count++;
             }
         }
+
         return count;
     }
 
     clear() {
         console.log("CLearing cart.");
         this.items = new Array();
+
+        return this; // Returning for method chaining
     }
 
     /* ---- Debug Functions ---- */
