@@ -1,0 +1,103 @@
+{
+    "options": [
+        {
+            "itemId": 100,
+            "itemName": "Page",
+            "description": "Add a new page to your site",
+            "price": 800,
+            "hasCustomNotes": true,
+            "possiblePlans": [
+                1,
+                2,
+                3
+            ],
+            "quantityLimit": 0
+        },
+        {
+            "itemId": 101,
+            "itemName": "Extra Contact",
+            "description": "Add an extra contact field to your site",
+            "price": 500,
+            "hasCustomNotes": true,
+            "possiblePlans": [
+                1,
+                2,
+                3
+            ],
+            "quantityLimit": 0
+        },
+        {
+            "itemId": 102,
+            "itemName": "Page Builder",
+            "description": "Add a custom page builder to your site.",
+            "price": 600,
+            "hasCustomNotes": true,
+            "possiblePlans": [
+                1,
+                3
+            ],
+            "quantityLimit": 0
+        },
+        {
+            "itemId": 103,
+            "itemName": "Logo Design",
+            "description": "Design a new logo for your site. Limited to 1 per site. Enquire for more details",
+            "price": 1500,
+            "hasCustomNotes": true,
+            "possiblePlans": [
+                1,
+                2,
+                3
+            ],
+            "quantityLimit": 1
+        },
+        {
+            "itemId": 104,
+            "itemName": "Multi Language",
+            "description": "Make your site multi-language",
+            "price": 1500,
+            "hasCustomNotes": false,
+            "possiblePlans": [
+                1,
+                2,
+                3
+            ],
+            "quantityLimit": 1
+        }
+    ],
+    "plans": [
+        {
+            "itemId": 1,
+            "itemName": "Corporate Site",
+            "description": "The standard plan",
+            "price": 15000,
+            "baseItems": [
+                100,
+                100,
+                100,
+                100,
+                100
+            ]
+        },
+        {
+            "itemId": 2,
+            "itemName": "LP",
+            "description": "A landing page instead of multiple pages",
+            "price": 8000,
+            "baseItems": []
+        },
+        {
+            "itemId": 3,
+            "itemName": "E-commerce Site",
+            "description": "A website tailor made for selling products online",
+            "price": 16000,
+            "baseItems": [
+                100,
+                100,
+                100,
+                100,
+                100
+            ]
+        }
+    ]
+}

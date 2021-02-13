@@ -27,7 +27,7 @@ export class Item {
 
     /* ---- Set ---- */
     set quantity(num) {
-        if(num > -1) {
+        if (num > -1) {
             this._quantity = num;
         }
     }
@@ -76,39 +76,51 @@ export class Plan extends Item {
     /* ---- Debug Functions ---- */
 }
 
-/* Build Item
+/* Build Item Element
 ----------------------------------------------- 
  * Creates the DOM element that represents the item that is to be added. 
  * Also adds event listeners to the item etc.
 */
-export function buildItemElement(item) {
-    /* ---- Build Element ---- */
-    let itemElement = document.createElement('li');
-    itemElement.setAttribute("itemid", item.itemId)
-    if (item instanceof Plan) {
-        itemElement.classList.add('plan-element');
-    } else if (item instanceof Option) {
-        itemElement.classList.add('option-element');
+export function buildItemElement(currentItem) {
+    /* ---- Create Parent ---- */
+    let itemParentElement = document.createElement('li');
+    itemParentElement.setAttribute("itemid", currentItem.itemId)
+    if (currentItem instanceof Plan) {
+        itemParentElement.classList.add('plan-element');
+    } else if (currentItem instanceof Option) {
+        itemParentElement.classList.add('option-element');
     }
-    // <li class><h4>
 
     /* ---- Build Title ---- */
-    let itemIdElement = document.createElement('h4');
-    itemIdElement.innerText = item.itemId + ": " + item.itemName;
-    itemElement.appendChild(itemIdElement);
-    // <li class><h4>
+    let itemTitleElement = document.createElement('h4');
+    itemTitleElement.innerText = currentItem.itemId + ": " + currentItem.itemName;
+    itemParentElement.appendChild(itemTitleElement);
 
     /* ---- Build Description ---- */
     let itemDescriptionElement = document.createElement('p');
-    itemDescriptionElement.innerText = item.description;
-    itemElement.appendChild(itemDescriptionElement);
-    // <li class><h4><p>
+    itemDescriptionElement.innerText = currentItem.description;
+    itemParentElement.appendChild(itemDescriptionElement);
 
     /* ---- Build Counter ---- */
-    if (item instanceof Option) {
-        //Container
-        let itemCounterElement = document.createElement('div');
-        itemCounterElement.classList.add("item-counter");
+    if (currentItem instanceof Option) {
+        itemParentElement.appendChild(buildCounterElement(currentItem));
+    } else if (currentItem instanceof Plan) {
+        itemParentElement.addEventListener("click", function () {
+            updateCurrentPlan(currentItem);
+        });
+    }
+
+    // Build rest of element here
+
+    return itemParentElement;
+}
+
+/* Build Counter Element
+-----------------------------------------------*/
+function buildCounterElement(item) {
+        //Parent
+        let counterElement = document.createElement('div');
+        counterElement.classList.add("item-counter");
 
         //Total
         let itemCounterTotalElement = document.createElement('div');
@@ -116,60 +128,53 @@ export function buildItemElement(item) {
         itemCounterTotalElement.innerText = item.quantity; // initialized as 0
         //Add click
 
-        //Add
+        //Add Button
         let itemCounterAddElement = document.createElement('div');
         itemCounterAddElement.classList.add("item-counter__add");
         itemCounterAddElement.classList.add(settings.jsActiveClassString); // Initialize as active
         itemCounterAddElement.addEventListener("click", function () {
             // Based on item quantityLimit, decide to add to cart
-            if( (item.quantityLimit > item.quantity) || (item.quantityLimit === 0) ){
+            if ((item.quantityLimit > item.quantity) || (item.quantityLimit === 0)) {
                 addToCart(item);
-                updateDOMCounter(item, itemCounterTotalElement);
+                updateViewCounterTotal(item, itemCounterTotalElement);
             } else {
                 console.log('Item has reached quantity limit. Aborting add');
             }
         });
 
-        //Remove
+        //Remove Button
         let itemCounterRemoveElement = document.createElement('div');
         itemCounterRemoveElement.classList.add("item-counter__remove");
         itemCounterRemoveElement.addEventListener("click", function () {
             removeFromCart(item);
-            updateDOMCounter(item, itemCounterTotalElement);
+            updateViewCounterTotal(item, itemCounterTotalElement);
         });
 
-        itemCounterElement.appendChild(itemCounterRemoveElement);
-        itemCounterElement.appendChild(itemCounterTotalElement);
-        itemCounterElement.appendChild(itemCounterAddElement);
-        itemElement.appendChild(itemCounterElement);
-    } else if (item instanceof Plan) {
-        itemElement.addEventListener("click", function () {
-            updateCurrentPlan(item);
-        });
-    }
+        // Append to parent
+        counterElement.appendChild(itemCounterRemoveElement);
+        counterElement.appendChild(itemCounterTotalElement);
+        counterElement.appendChild(itemCounterAddElement);
 
-    // Build rest of element here
-
-    return itemElement;
+        return counterElement;
 }
 
 /* Add item to cart
 -----------------------------------------------*/
 function addToCart(item) {
-    w.cart.addItem(item);
-    ///*** Complete method
+    w.cartData.addItem(item);
+    ///*** Complete method - update price etc
 }
 
 /* Remove item to cart
 -----------------------------------------------*/
 function removeFromCart(item) {
-    w.cart.removeItem(item);
-    //*** */ Complete method
+    w.cartData.removeItem(item);
+    //*** Complete method - update price etc
 }
 
 /* Update the counter
 -----------------------------------------------*/
-function updateDOMCounter(item, element) {
+function updateViewCounterTotal(item, element) {
     let removeElement = element.previousElementSibling;
     let addElement = element.nextElementSibling;
 
@@ -177,48 +182,48 @@ function updateDOMCounter(item, element) {
 
     // If item quantity is 0, deactivate minus and activate add
     // Else activate minus
-    if(item.quantity <= 0) {
+    if (item.quantity <= 0) {
         removeElement.classList.remove(settings.jsActiveClassString); // remove active state from minus button
         addElement.classList.add(settings.jsActiveClassString); // add active state to add button
     } else {
         removeElement.classList.add(settings.jsActiveClassString); // remove active state from minus button
     }
-
-
-    // *** IMPLEMENT the updating of neighbouring buttons (e.g. grey out if zero items etc)
 }
 
 /* Update Plan
 ----------------------------------------------- */
 export function updateCurrentPlan(newPlan) {
-    /* ---- Cart Ops ---- *
-    * Loop through cart, remove current plan and replace with new
-    */
-    let cartPlanFound = false; // Used to find out if operation should be plan change or plan addition
-    w.cart.items.forEach(function (item, i) {
+    /* ---- Cart Ops ---- */
+
+    // Loop through cart items, swap current plan item with new plan item
+    let cartPlanFound = false;
+    w.cartData.items.forEach(function (item, i) {
         // If is Plan object and is currentPlan
-        if (w.currentPlan.itemId == item.itemId) {
-            w.cart.items[i] = newPlan;
+        if (w.currentPlanData.itemId == item.itemId) {
+            w.cartData.items[i] = newPlan;
             cartPlanFound = true;
         }
     });
 
     if (!cartPlanFound) {
+        // If plan not found in cart, create
         console.log("Nothing found in cart. Adding " + newPlan.itemName + " to cart now.");
-        w.cart.addItem(newPlan);
+        w.cartData.addItem(newPlan);
+    } else if (w.currentPlanData != newPlan) {
+        console.log(w.currentPlanData.itemName + " plan found in cart. Replacing with " + newPlan.itemName + " now.");
     } else {
-        console.log(w.currentPlan.itemName + " plan found in cart. Replacing with " + newPlan.itemName + " now.");
+        console.log("This plan is already selected");
     }
 
     /* ---- DOM Ops ---- *
      * Find current plan in the DOM, deactivate.
      * Find new plan in DOM, activate
     */
-    deactivateDOMItem(currentPlan.itemId);
+    deactivateDOMItem(w.currentPlanData.itemId);
     activateDOMItem(newPlan.itemId);
 
     // Finally update the current plan
-    w.currentPlan = newPlan;
+    w.currentPlanData = newPlan;
 }
 
 /* Item Utility Classes
@@ -228,14 +233,14 @@ export function findDOMItem(itemId) {
 }
 
 export function activateDOMItem(itemId) {
-    let elementToActivate = document.body.querySelector('[itemid="' + itemId + '"]');
+    let elementToActivate = findDOMItem(itemId);
     if (elementToActivate) {
         elementToActivate.classList.add(settings.jsActiveClassString);
     }
 }
 
 export function deactivateDOMItem(itemId) {
-    let elementToDeactivate = document.body.querySelector('[itemid="' + itemId + '"]');
+    let elementToDeactivate = findDOMItem(itemId);
     if (elementToDeactivate) {
         elementToDeactivate.classList.remove(settings.jsActiveClassString);
     }

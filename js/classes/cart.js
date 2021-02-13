@@ -13,6 +13,7 @@ export default class Cart {
 
     /* ---- Class Functions ---- */
     getTotalPrice() {
+        // *** IMPLEMENT
     }
 
     addItem(newItem) {

@@ -1,5 +1,9 @@
 /**
  * Author: Sean Verity
+ * This app is almost entirely clientside, with the exception being the initial fetching of JSON
+ * This shopping cart is built on the principle that the DOM mirrors the data, and that all
+ * changes to data will also be reflected in the DOM (view).
+ * Thus all functions to data (the State) must have a DOM counterpart.
  */
 
 let w = window;
@@ -36,24 +40,20 @@ export const settings = {
 
 /* ====== Global ====== */
 /* ---- Cart Init ---- *
-* Create cart and cart element
+* Create cart data and cart view
 */
 
-w.cart = new Cart();
-w.currentPlan = new Plan();
+w.cartData = new Cart();
+w.currentPlanData = new Plan();
 
 function appInit(jsonData) {
-    /* ---- Plans Init ---- *
-     * Create plans from JSON data
-     * Initiates cart, plans and options in the DOM
-     * Sets plan with itemId=1 (standard plan) to be the currently selected plan
-    */
-    // Create plan-container
+    /* ---- Plans Init ---- */
+    // Find container element in view
     const planContainerElement = document.body.querySelector(".plan-container");
 
-    // Create plan items, add items to container
+    // Create plan items in data, add items to container in view
     for (const currentObject of jsonData.plans) {
-        //Create current plan instance
+        //Create object for plans data
         let plan = new Plan(
             currentObject.itemId,
             currentObject.itemName,
@@ -62,24 +62,25 @@ function appInit(jsonData) {
             currentObject.baseItems
         );
 
-        //Create element for planlist
+        //Create element for plans view
         let element = buildItemElement(plan);
 
-        //Add current plan to planlist
+        //Add element to view
         planContainerElement.appendChild(element);
 
         //Initally set #1 "Corporate Site" as currentPlan
         if (currentObject.itemId == 1) {
-            w.currentPlan = plan;
+            w.currentPlanData = plan;
         }
     }
 
     // Initiate initial currentPlan
-    updateCurrentPlan(w.currentPlan);
+    updateCurrentPlan(w.currentPlanData);
 
 
     /* ---- Options Inits ---- *
-     * Create options from JSON data
+     * Create options data from JSON
+     * Adds to view
     */
     let optionContainerElement = document.body.querySelector(".option-container");
     for (const currentObject of jsonData.options) {
@@ -93,7 +94,7 @@ function appInit(jsonData) {
             currentObject.quantityLimit
         );
 
-        if (option.possiblePlans.includes(currentPlan.itemId)) {
+        if (option.possiblePlans.includes(w.currentPlanData.itemId)) {
             optionContainerElement.appendChild(buildItemElement(option));
         }
     }
