@@ -100,9 +100,9 @@ export function buildItemElement(currentItem) {
     itemParentElement.appendChild(itemDescriptionElement);
 
     /* ---- Build Counter ---- */
-    if (currentItem instanceof Option) {
+    if (currentItem instanceof Option) { //*** REFACTOR 'instanceof' not needed if classes refactored
         itemParentElement.appendChild(buildCounterElement(currentItem));
-    } else if (currentItem instanceof Plan) {
+    } else if (currentItem instanceof Plan) { //*** REFACTOR 'instanceof' not needed if classes refactored
         itemParentElement.addEventListener("click", function () {
             updateCurrentPlan(currentItem);
         });
