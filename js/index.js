@@ -78,7 +78,6 @@ function appInit(jsonData) {
     // Initiate initial currentPlan
     updateCurrentPlan(w.currentPlanData);
 
-
     /* ---- Options Inits ---- *
      * Create options data from JSON
      * Adds to view
