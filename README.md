@@ -10,4 +10,4 @@ Things learnt:
 Mistakes (that are too hard to fix this far in):
 ===
 - The Cart class perhaps doesn't adhere to the SRP rule of SOLID
-- Matching of DOM and data wasn't considered at the start of the project, and thus isn't handled very well. The build-functions (mainly 'buildItemElement') were created haphazardly don't feel logical
+- Matching of DOM and data wasn't considered at the start of the project, and thus isn't handled very well. The build-functions (mainly 'buildItemElement') were created haphazardly and don't feel logical
